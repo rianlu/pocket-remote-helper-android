@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">口袋遥控 TV</string>
+    <string name="notify_running">遥控服务运行中</string>
+    <string name="status_waiting">等待手机连接</string>
+    <string name="status_pin">在手机上输入配对码</string>
+    <string name="status_connected">已连接</string>
+    <string name="label_pin">配对码</string>
+    <string name="label_ip">本机 IP</string>
+    <string name="hint_boot">若开机不能自动启动，请把本应用加入系统自启动白名单。</string>
+</resources>
