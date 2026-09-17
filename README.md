@@ -25,19 +25,17 @@ export ANDROID_HOME=/path/to/Android/sdk
 
 装到盒子后打开「口袋遥控 TV」。
 
-**模拟器**（Mac 不能直连 `10.0.2.15`，必须转发）：
+**模拟器**（Mac 不能直连模拟器 IP，必须转发）：
 
 ```bash
 adb forward tcp:17880 tcp:17880
-python3 scripts/test_ws.py hello          # 屏幕出现 6 位配对码
-python3 scripts/test_ws.py pin 123456     # 换成屏幕上的数字；脚本会保存 token
-python3 scripts/test_ws.py key up         # 之后命令会自动带 token 重新握手
-python3 scripts/test_ws.py text hello
-python3 scripts/test_ws.py apps
+python3 scripts/test_ws.py
+# 看电视上的 6 位码，回车前输入即可
+# 或：python3 scripts/test_ws.py 672821
 ```
 
-**真机同一 Wi-Fi**：
+日志在 `scripts/logs/test_ws-时间.log`，把该文件发出来即可分析。
 
-```bash
-python3 scripts/test_ws.py --host 192.168.1.20 hello
-```
+单步命令仍可用：`hello` / `pin` / `key` / `text` / `apps`。
+
+**真机同一 Wi-Fi**：`python3 scripts/test_ws.py --host 192.168.1.20`
