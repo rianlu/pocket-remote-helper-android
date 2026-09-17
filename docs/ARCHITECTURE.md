@@ -18,7 +18,7 @@
 
 | 仓库 | 角色 | minSdk |
 |---|---|---|
-| pockettv-remote-android | 手机客户端 | 21 |
+| pockettv-remote-android | 手机客户端 | 26 |
 | pockettv-helper-android | 电视助手 | 16 |
 
 发现：NSD → 失败 UDP → 再失败手填 IP。  
