@@ -6,8 +6,9 @@
 |---|---|
 | applicationId | `com.pockettv.tv` |
 | minSdk | 16（Android 4.1） |
-| 协议 | [`docs/PROTOCOL.md`](docs/PROTOCOL.md) |
+| 协议（权威） | [`docs/PROTOCOL.md`](docs/PROTOCOL.md) |
 | 本端规格 | [`docs/SPEC.md`](docs/SPEC.md) |
+| 设计背景 | [`docs/DESIGN.md`](docs/DESIGN.md) |
 | AI 开发说明 | [`AGENTS.md`](AGENTS.md) |
 
 本仓库只含电视端。禁止 Compose / OkHttp 4。

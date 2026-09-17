@@ -1,43 +1,35 @@
 # AGENTS.md
 
-给在本仓库写代码的 AI。产品协议在 `docs/PROTOCOL.md`，本端规格在 `docs/SPEC.md`。先读这两份再改代码。
+给本仓库写代码的 AI。先读文档再改代码。
 
-## 本仓库是什么
+| 文件 | 用途 |
+|---|---|
+| [`docs/PROTOCOL.md`](docs/PROTOCOL.md) | 协议权威文本，须与 `pockettv-remote-android` 的同名文件一致 |
+| [`docs/SPEC.md`](docs/SPEC.md) | 本仓库（电视端）怎么实现 |
+| [`docs/DESIGN.md`](docs/DESIGN.md) | 背景与范围，不依赖其它本地目录 |
 
-GitHub 仓库名：**pockettv-helper-android**  
-安卓**电视/盒子**助手（口袋遥控 TV）。手机客户端在独立仓库 `pockettv-remote-android`。
+## 本仓库
 
-不要在本仓库实现手机 App、不要写鸿蒙。
-
-## 开工前
-
-1. 读 `docs/PROTOCOL.md`（禁止改端口、JSON `type`、字段名）。
-2. 读 `docs/SPEC.md`（服务、注入、minSdk 16、验收）。
-3. 缺规格就问用户，不要发明第二套协议。
-
-## 技术约束
-
-- minSdk **16**，compileSdk 35，Java 8 字节码
-- UI 只用 View；**禁止 Compose**
-- HTTP：OkHttp 3.12.x 或 `HttpURLConnection`；**禁止 OkHttp 4**、Ktor
-- 禁止 Hilt、DataStore、WorkManager
-- 线程用 HandlerThread / Executor，禁止 AsyncTask
-- 常量类必须与 PROTOCOL 表逐字一致
-
-## 禁止
-
-- 改 PROTOCOL 中的端口、NSD 类型、magic、JSON 字段
-- 输入法、无障碍
-- 用 ADB 当遥控通道；第一期不要扫厂商口装包
-- 静默 `pm install`（必须走系统安装页）
-- MQTT、广告 SDK、ConnectSDK
-- 完整文件管理器；路径逃逸出 `/sdcard/PocketTV/`
-- 把手机端代码放进本仓库
+**pockettv-helper-android**：安卓电视/盒子助手（口袋遥控 TV）。手机在独立仓库 `pockettv-remote-android`。不要在本仓库写手机 App 或鸿蒙。
 
 ## 改协议
 
-不要直接改 `docs/PROTOCOL.md` 凑实现。先改工作区 `pocket-tv-android/docs/TV遥控器开发参考.md`，再同步两端 PROTOCOL。
+只改 `docs/PROTOCOL.md`，并在 **remote 仓库做同样修改**，保持两份文件一致。不要为了省事只改一端。不要发明第二套字段。
 
-## 完成标准
+## 技术
 
-可先用 `websocat` 打 `ws://<tv>:17880/ws` 验收 hello。按键和发现必须在 Android 4.2–4.4 真盒子上验证，模拟器 NSD 不算。
+- minSdk 16，compileSdk 35，Java 8 字节码
+- **禁止 Compose、OkHttp 4、Ktor、Hilt、DataStore、WorkManager、AsyncTask**
+- HTTP：OkHttp 3.12.x 或 HttpURLConnection
+- 常量与 PROTOCOL 表逐字一致
+
+## 禁止
+
+- 输入法、无障碍
+- ADB 当遥控；第一期不扫厂商口装包
+- 静默 `pm install`
+- MQTT、广告 SDK、ConnectSDK
+- 路径逃逸出 `/sdcard/PocketTV/`
+- 把手机端代码放进本仓库
+
+缺规格就问，不要猜。按键和发现须在 Android 4.2–4.4 真盒子验证；可用 `websocat` 先验 hello。

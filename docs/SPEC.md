@@ -1,6 +1,6 @@
 # PocketTV Helper（Android 电视端）规格
 
-本仓库只实现**电视/盒子助手**。协议见 [`PROTOCOL.md`](PROTOCOL.md)，与手机仓库必须一致。
+本仓库只实现**电视/盒子助手**。协议以 [`PROTOCOL.md`](PROTOCOL.md) 为准（须与 remote 仓库同名文件一致）。背景见 [`DESIGN.md`](DESIGN.md)。
 
 - 桌面名：口袋遥控 TV
 - applicationId：`com.pockettv.tv`

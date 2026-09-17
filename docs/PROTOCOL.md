@@ -1,13 +1,10 @@
 # PocketTV 协议（冻结）
 
-两端契约。改字段、端口、路径必须先改工作区 `docs/TV遥控器开发参考.md`，再同步本文件。**禁止在实现时私改。**
+本文件是协议的**权威文本**。`pockettv-remote-android` 与 `pockettv-helper-android` 里的 `docs/PROTOCOL.md` **必须逐字一致**。
 
-配套仓库：
+改端口、JSON `type`、字段名、路径时：同时改这两个仓库的本文件，再改代码。禁止只改一端、禁止实现时私改。
 
-- 手机：`pockettv-remote-android`（客户端）
-- 电视：`pockettv-helper-android`（本端是服务端）
-
-日常遥控走本协议。不要用 ADB 当遥控通道。第一期不要扫厂商口装包。
+日常遥控只走本协议，不用 ADB 当遥控通道。第一期不要扫厂商口装包。
 
 ---
 
@@ -26,19 +23,19 @@
 | 协议版本 `v` | `1` |
 | 电视文件根 | `/sdcard/PocketTV/`（`inbox/`、`apk/`） |
 
-电视进程在 `17880` 同时提供 WebSocket `/ws` 与 HTTP `/transfer/*`。发现只用 `17882`。
+电视在 `17880` 同时提供 WebSocket `/ws` 与 HTTP `/transfer/*`。发现只用 `17882`。
 
 ---
 
 ## 帧
 
-WebSocket **text** 帧，每条一个 JSON 对象：
+WebSocket **text** 帧，每条一个 JSON：
 
 ```json
 { "v": 1, "id": "<uuid>", "type": "<见下表>", "payload": {} }
 ```
 
-响应必须带回同一 `id`。`type` 仅允许下表。
+响应带回同一 `id`。`type` 仅允许：
 
 | type | 方向 | payload |
 |---|---|---|
@@ -53,7 +50,7 @@ WebSocket **text** 帧，每条一个 JSON 对象：
 | `app_open` | 手机→电视 | `{ "pkg": "..." }` |
 | `app_uninstall` | 手机→电视 | `{ "pkg": "..." }` |
 
-没有 `ime.start`。无有效 token 时只接受 `hello`，其它回 `error.code=AUTH`。
+没有 `ime.start`。无有效 token 只接受 `hello`，其它回 `error.code=AUTH`。
 
 ### 键值（Android KeyEvent）
 
@@ -64,20 +61,20 @@ WebSocket **text** 帧，每条一个 JSON 对象：
 | 音量 ± / 静音 | 24 / 25 / 164 |
 | 0–9 | 7–16 |
 
-音量用 `AudioManager.adjustStreamVolume`，不要只靠 `input keyevent 24/25`。
+电视端音量用 `AudioManager`，不要只靠 key 24/25。
 
 ---
 
 ## 握手
 
 1. 手机连 `ws://ip:17880/ws`，发 `hello`（可无 token）。
-2. 未配对：回 `need_pin` 并全屏显示 6 位 PIN（60 秒）；手机再发 `hello.pin`。
+2. 未配对：电视 `need_pin` 并显示 PIN；手机再发 `hello.pin`。
 3. PIN 正确：`hello_ok`（含 token）。错误 3 次关闭配对窗，`error AUTH`。
 4. 已有有效 token：直接 `hello_ok`。
-5. `hello_ok.sdk` 填 `Build.VERSION.SDK_INT`。
-6. `hello_ok.injectOk`：启动时探测 `input keyevent` 是否成功。
+5. `hello_ok.sdk` 为电视 `Build.VERSION.SDK_INT`。手机若 `sdk < 21` 且文本含非 ASCII，提示中文可能无效，仍可发送。
+6. `hello_ok.injectOk`：电视启动时探测 `input keyevent`。
 
-Token 持久化。HTTP：`Authorization: Bearer <token>`，否则 401。
+Token 双方持久化。HTTP：`Authorization: Bearer <token>`，否则 401。
 
 ---
 
@@ -85,16 +82,16 @@ Token 持久化。HTTP：`Authorization: Bearer <token>`，否则 401。
 
 | 方法 | 路径 | 说明 |
 |---|---|---|
-| PUT | `/transfer/upload?dir=inbox\|apk&name=` | 请求体原始字节，落到对应目录 |
+| PUT | `/transfer/upload?dir=inbox\|apk&name=` | 请求体原始字节 |
 | GET | `/transfer/download?name=` | |
 | GET | `/transfer/list` | `{ "files": [ { "name", "dir": "inbox\|apk", "size", "mtime" } ] }` |
 
-只允许 `inbox` 与 `apk`，规范化路径，拒绝 `..`。
+只允许 `inbox` 与 `apk`，拒绝 `..`。
 
 ---
 
 ## UDP 发现
 
-监听 `17882`。收到 `PTVDISC1` + 端口后，单播回 `PTVDISC1` + `17880` + UTF-8 设备名。
+广播 `255.255.255.255:17882`。payload = `PTVDISC1` + uint16 大端 `17880`。电视单播回同样头部 + UTF-8 设备名。手机监听 17882。
 
-NSD 宣告 `_pockettv._tcp.`，服务名 `PocketTV`，TXT：`id`（安装时生成 UUID 并持久化）、`sdk`、`v=1`。
+NSD TXT：`id`（电视安装时生成的 UUID）、`sdk`、`v=1`。
