@@ -4,8 +4,8 @@
 Emulator (from the host):
   adb forward tcp:17880 tcp:17880
   python3 scripts/test_ws.py hello
-  python3 scripts/test_ws.py pin 123456
-  python3 scripts/test_ws.py key 19
+  python3 scripts/test_ws.py pin 123456   # saves token locally
+  python3 scripts/test_ws.py key 19       # reuses token on a new connection
   python3 scripts/test_ws.py text hello
 
 Real device on LAN:
@@ -116,6 +116,42 @@ def _recv_exact(sock, n):
     return buf
 
 
+def token_path(host, port):
+    safe = "%s_%s" % (host.replace(".", "_"), port)
+    return os.path.join(os.path.expanduser("~"), ".pockettv-token-" + safe)
+
+
+def load_token(host, port):
+    path = token_path(host, port)
+    if not os.path.isfile(path):
+        return ""
+    with open(path, "r") as f:
+        return f.read().strip()
+
+
+def save_token(host, port, token):
+    path = token_path(host, port)
+    with open(path, "w") as f:
+        f.write(token)
+    print("saved token ->", path)
+
+
+def remember_token(host, port, reply):
+    if not reply:
+        return
+    try:
+        obj = json.loads(reply)
+    except ValueError:
+        return
+    if obj.get("type") != "hello_ok":
+        return
+    token = (obj.get("payload") or {}).get("token")
+    if token:
+        save_token(host, port, token)
+    if obj.get("payload", {}).get("injectOk") is False:
+        print("note: injectOk=false, key/text may still fail on this device")
+
+
 def send_msg(sock, msg_type, payload):
     msg = {
         "v": 1,
@@ -133,6 +169,16 @@ def send_msg(sock, msg_type, payload):
         return None
     print("<<", reply)
     return reply
+
+
+def ensure_authed(sock, host, port):
+    token = load_token(host, port)
+    if not token:
+        raise SystemExit("no saved token. run: python3 scripts/test_ws.py hello && python3 scripts/test_ws.py pin <code>")
+    reply = send_msg(sock, "hello", {"token": token})
+    remember_token(host, port, reply)
+    if not reply or '"hello_ok"' not in reply:
+        raise SystemExit("auth failed, pair again with hello + pin")
 
 
 def parse_key(raw):
@@ -168,14 +214,17 @@ def main():
         if args.cmd == "hello":
             send_msg(sock, "hello", {})
         elif args.cmd == "pin":
-            send_msg(sock, "hello", {"pin": args.code})
+            remember_token(args.host, args.port, send_msg(sock, "hello", {"pin": args.code}))
         elif args.cmd == "token":
-            send_msg(sock, "hello", {"token": args.token})
+            remember_token(args.host, args.port, send_msg(sock, "hello", {"token": args.token}))
         elif args.cmd == "key":
+            ensure_authed(sock, args.host, args.port)
             send_msg(sock, "key", {"action": "click", "code": parse_key(args.name)})
         elif args.cmd == "text":
+            ensure_authed(sock, args.host, args.port)
             send_msg(sock, "text", {"text": args.value})
         elif args.cmd == "apps":
+            ensure_authed(sock, args.host, args.port)
             send_msg(sock, "apps", {})
     finally:
         sock.close()

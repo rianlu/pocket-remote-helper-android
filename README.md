@@ -30,8 +30,8 @@ export ANDROID_HOME=/path/to/Android/sdk
 ```bash
 adb forward tcp:17880 tcp:17880
 python3 scripts/test_ws.py hello          # 屏幕出现 6 位配对码
-python3 scripts/test_ws.py pin 123456     # 换成屏幕上的数字，应返回 hello_ok
-python3 scripts/test_ws.py key up         # 或 down/left/right/ok/back/home/menu
+python3 scripts/test_ws.py pin 123456     # 换成屏幕上的数字；脚本会保存 token
+python3 scripts/test_ws.py key up         # 之后命令会自动带 token 重新握手
 python3 scripts/test_ws.py text hello
 python3 scripts/test_ws.py apps
 ```
