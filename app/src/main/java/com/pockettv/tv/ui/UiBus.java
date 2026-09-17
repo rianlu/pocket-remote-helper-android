@@ -1,4 +1,4 @@
-package com.pockettv.tv;
+package com.pockettv.tv.ui;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -6,6 +6,7 @@ import android.os.Looper;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/** 后台线程把 PIN/状态抛到主线程刷新界面。 */
 public final class UiBus {
     public interface Listener {
         void onPinChanged(String pin);

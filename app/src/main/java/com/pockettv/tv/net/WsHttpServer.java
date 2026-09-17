@@ -1,4 +1,4 @@
-package com.pockettv.tv;
+package com.pockettv.tv.net;
 
 import android.util.Base64;
 import android.util.Log;
@@ -17,8 +17,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import com.pockettv.tv.protocol.Constants;
+import com.pockettv.tv.protocol.CommandProcessor;
+import com.pockettv.tv.store.Prefs;
+import com.pockettv.tv.store.TransferStore;
 
-final class WsHttpServer {
+/** 同一端口 17880：GET /ws 升级为 WebSocket，其余走 HTTP /transfer/*。 */
+public final class WsHttpServer {
     private static final String TAG = "PocketTvNet";
     private static final String WS_GUID = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
     private final CommandProcessor commands;
@@ -28,13 +33,13 @@ final class WsHttpServer {
     private ServerSocket server;
     private final ExecutorService pool = Executors.newCachedThreadPool();
 
-    WsHttpServer(CommandProcessor commands, Prefs prefs, TransferStore store) {
+    public WsHttpServer(CommandProcessor commands, Prefs prefs, TransferStore store) {
         this.commands = commands;
         this.prefs = prefs;
         this.store = store;
     }
 
-    void start() throws Exception {
+    public void start() throws Exception {
         server = new ServerSocket(Constants.CONTROL_PORT);
         running = true;
         Thread t = new Thread(new Runnable() {
@@ -61,7 +66,7 @@ final class WsHttpServer {
         Log.i(TAG, "listen " + Constants.CONTROL_PORT);
     }
 
-    void stop() {
+    public void stop() {
         running = false;
         try {
             if (server != null) {

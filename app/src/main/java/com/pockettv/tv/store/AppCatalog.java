@@ -1,4 +1,4 @@
-package com.pockettv.tv;
+package com.pockettv.tv.store;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +13,9 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.util.List;
+import com.pockettv.tv.protocol.Constants;
 
+/** 已装应用列表、打开、卸载、调起系统安装页。 */
 public final class AppCatalog {
     private final Context app;
 

@@ -1,4 +1,4 @@
-package com.pockettv.tv;
+package com.pockettv.tv.inject;
 
 import android.util.Log;
 
@@ -10,6 +10,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 /** Best-effort local adbd on 127.0.0.1:5555. Fails quietly if AUTH is required. */
+/** 尽力连接本机 adbd；需要 AUTH 时直接失败。 */
 final class LocalAdb {
     private static final String TAG = "PocketTvAdb";
     private static final int A_CNXN = 0x4e584e43;

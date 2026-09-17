@@ -1,6 +1,6 @@
-package com.pockettv.tv;
+package com.pockettv.tv.protocol;
 
-/** Values must match docs/PROTOCOL.md. */
+/** 协议冻结常量，必须与 docs/PROTOCOL.md 逐字一致。 */
 public final class Constants {
     public static final int CONTROL_PORT = 17880;
     public static final int UDP_PORT = 17882;

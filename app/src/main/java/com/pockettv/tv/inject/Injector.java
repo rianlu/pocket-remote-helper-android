@@ -1,4 +1,4 @@
-package com.pockettv.tv;
+package com.pockettv.tv.inject;
 
 import android.content.Context;
 import android.media.AudioManager;
@@ -8,6 +8,7 @@ import android.util.Log;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
+/** 本机按键与文本注入。先 exec input，失败再试 127.0.0.1:5555。 */
 public final class Injector {
     private static final String TAG = "PocketTvInject";
     private final Context app;
@@ -17,6 +18,7 @@ public final class Injector {
         this.app = context.getApplicationContext();
     }
 
+    /** 探测 input 是否可用；模拟器上常为 false。 */
     public boolean probe() {
         if (shellOk == null) {
             shellOk = Boolean.valueOf(runInput("keyevent", "0") || LocalAdb.shell("input keyevent 0"));
@@ -24,6 +26,7 @@ public final class Injector {
         return shellOk.booleanValue();
     }
 
+    /** @param code Android KeyEvent 数值，见 PROTOCOL.md */
     public boolean key(int code) {
         if (code == 24 || code == 25 || code == 164) {
             return volume(code);

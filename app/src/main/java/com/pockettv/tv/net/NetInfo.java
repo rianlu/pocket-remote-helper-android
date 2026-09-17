@@ -1,12 +1,13 @@
-package com.pockettv.tv;
+package com.pockettv.tv.net;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Enumeration;
 
-final class NetInfo {
-    static String ipv4() {
+/** 取当前 IPv4，供主界面展示。 */
+public final class NetInfo {
+    public static String ipv4() {
         try {
             Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
             while (en.hasMoreElements()) {

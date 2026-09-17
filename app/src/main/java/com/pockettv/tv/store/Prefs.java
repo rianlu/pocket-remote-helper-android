@@ -1,4 +1,4 @@
-package com.pockettv.tv;
+package com.pockettv.tv.store;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -9,6 +9,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
 
+/** 持久化设备 id 与已配对 token。 */
 public final class Prefs {
     private static final String FILE = "pockettv_helper";
     private static final String KEY_DEVICE_ID = "device_id";

@@ -53,7 +53,7 @@
         </receiver>
 
         <provider
-            android:name=".FileShareProvider"
+            android:name=".store.FileShareProvider"
             android:authorities="com.pockettv.tv.files"
             android:exported="false"
             android:grantUriPermissions="true" />

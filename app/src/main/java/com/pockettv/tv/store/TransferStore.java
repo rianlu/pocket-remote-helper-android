@@ -1,4 +1,4 @@
-package com.pockettv.tv;
+package com.pockettv.tv.store;
 
 import android.os.Environment;
 
@@ -10,7 +10,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import com.pockettv.tv.protocol.Constants;
 
+/** 只允许 /sdcard/PocketTV/inbox 与 apk，拒绝路径穿越。 */
 public final class TransferStore {
     public File root() {
         File dir = new File(Environment.getExternalStorageDirectory(), Constants.ROOT_DIR_NAME);
@@ -28,6 +30,7 @@ public final class TransferStore {
         return null;
     }
 
+    /** dir 只能是 inbox/apk；文件名不得含路径分隔或 .. */
     public File resolve(String dirName, String fileName) {
         File d = dir(dirName);
         if (d == null || fileName == null || fileName.length() == 0) {

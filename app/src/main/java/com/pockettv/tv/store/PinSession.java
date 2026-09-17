@@ -1,7 +1,9 @@
-package com.pockettv.tv;
+package com.pockettv.tv.store;
 
 import java.util.Random;
+import com.pockettv.tv.protocol.Constants;
 
+/** 6 位 PIN，60 秒有效，错误 3 次关闭。 */
 public final class PinSession {
     private final Object lock = new Object();
     private String pin;

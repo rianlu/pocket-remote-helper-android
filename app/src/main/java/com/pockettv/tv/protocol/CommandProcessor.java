@@ -1,4 +1,4 @@
-package com.pockettv.tv;
+package com.pockettv.tv.protocol;
 
 import android.content.Context;
 import android.os.Build;
@@ -6,12 +6,18 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.util.UUID;
+import com.pockettv.tv.inject.Injector;
+import com.pockettv.tv.store.Prefs;
+import com.pockettv.tv.store.PinSession;
+import com.pockettv.tv.store.AppCatalog;
+import com.pockettv.tv.ui.UiBus;
+import com.pockettv.tv.R;
 
+/** 解析 WebSocket JSON，按 type 分发给注入/应用/配对逻辑。 */
 public final class CommandProcessor {
     private final Context app;
     private final Prefs prefs;
@@ -28,6 +34,10 @@ public final class CommandProcessor {
         this.apps = new AppCatalog(app);
     }
 
+    /**
+     * @param authorized 本条 WebSocket 连接是否已 hello_ok
+     * @return 要回给客户端的 JSON；无需回复时返回 null
+     */
     public String handle(String raw, boolean authorized) throws Exception {
         JSONObject in = new JSONObject(raw);
         int v = in.optInt("v", 0);
@@ -129,14 +139,14 @@ public final class CommandProcessor {
         return apps.installApk(file);
     }
 
-    static String error(String id, String code, String message) throws Exception {
+    public static String error(String id, String code, String message) throws Exception {
         JSONObject p = new JSONObject();
         p.put("code", code);
         p.put("message", message);
         return msg(id, Constants.TYPE_ERROR, p);
     }
 
-    static String msg(String id, String type, JSONObject payload) throws Exception {
+    public static String msg(String id, String type, JSONObject payload) throws Exception {
         JSONObject o = new JSONObject();
         o.put("v", Constants.PROTOCOL_V);
         o.put("id", id);

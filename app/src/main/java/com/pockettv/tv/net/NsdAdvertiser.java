@@ -1,24 +1,27 @@
-package com.pockettv.tv;
+package com.pockettv.tv.net;
 
 import android.content.Context;
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
 import android.os.Build;
 import android.util.Log;
+import com.pockettv.tv.protocol.Constants;
+import com.pockettv.tv.store.Prefs;
 
-final class NsdAdvertiser {
+/** NSD 宣告 _pockettv._tcp.；TXT 仅 API 21+。 */
+public final class NsdAdvertiser {
     private static final String TAG = "PocketTvNsd";
     private final Context app;
     private final Prefs prefs;
     private NsdManager nsd;
     private NsdManager.RegistrationListener listener;
 
-    NsdAdvertiser(Context context, Prefs prefs) {
+    public NsdAdvertiser(Context context, Prefs prefs) {
         this.app = context.getApplicationContext();
         this.prefs = prefs;
     }
 
-    void start() {
+    public void start() {
         nsd = (NsdManager) app.getSystemService(Context.NSD_SERVICE);
         if (nsd == null) {
             return;
@@ -62,7 +65,7 @@ final class NsdAdvertiser {
         }
     }
 
-    void stop() {
+    public void stop() {
         if (nsd != null && listener != null) {
             try {
                 nsd.unregisterService(listener);

@@ -1,4 +1,4 @@
-package com.pockettv.tv;
+package com.pockettv.tv.net;
 
 import android.os.Build;
 import android.util.Log;
@@ -8,13 +8,15 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import com.pockettv.tv.protocol.Constants;
 
-final class UdpDiscovery {
+/** 监听 UDP 17882，应答 PTVDISC1 发现包。 */
+public final class UdpDiscovery {
     private static final String TAG = "PocketTvUdp";
     private volatile boolean running;
     private DatagramSocket socket;
 
-    void start() {
+    public void start() {
         running = true;
         Thread t = new Thread(new Runnable() {
             @Override
@@ -53,7 +55,7 @@ final class UdpDiscovery {
         t.start();
     }
 
-    void stop() {
+    public void stop() {
         running = false;
         if (socket != null) {
             socket.close();

@@ -1,4 +1,4 @@
-package com.pockettv.tv;
+package com.pockettv.tv.store;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -9,6 +9,7 @@ import android.os.ParcelFileDescriptor;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+/** API 24+ 安装 APK 用的 content:// 授权，不依赖 AndroidX FileProvider。 */
 public final class FileShareProvider extends ContentProvider {
     @Override
     public boolean onCreate() {

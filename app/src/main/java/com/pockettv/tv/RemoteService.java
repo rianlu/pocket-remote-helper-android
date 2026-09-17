@@ -8,6 +8,17 @@ import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.pockettv.tv.inject.Injector;
+import com.pockettv.tv.net.NsdAdvertiser;
+import com.pockettv.tv.net.UdpDiscovery;
+import com.pockettv.tv.net.WsHttpServer;
+import com.pockettv.tv.protocol.CommandProcessor;
+import com.pockettv.tv.store.PinSession;
+import com.pockettv.tv.store.Prefs;
+import com.pockettv.tv.store.TransferStore;
+import com.pockettv.tv.ui.UiBus;
+
+/** 前台服务：拉起 WebSocket/HTTP、UDP、NSD。 */
 public final class RemoteService extends Service {
     private static final String TAG = "PocketTvSvc";
     private static final int NOTIFY_ID = 16;

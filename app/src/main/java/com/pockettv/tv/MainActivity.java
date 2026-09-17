@@ -6,6 +6,11 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.TextView;
 
+import com.pockettv.tv.net.NetInfo;
+import com.pockettv.tv.protocol.Constants;
+import com.pockettv.tv.ui.UiBus;
+
+/** 显示连接状态、本机 IP 与配对 PIN。 */
 public final class MainActivity extends Activity implements UiBus.Listener {
     private TextView textStatus;
     private TextView textPin;
