@@ -12,3 +12,5 @@
 | AI 开发说明 | [`AGENTS.md`](AGENTS.md) |
 
 本仓库只含电视端。禁止 Compose / OkHttp 4。
+
+许可证：[Apache License 2.0](LICENSE)。可商用、可修改、可再分发，保留版权与许可证声明即可。
