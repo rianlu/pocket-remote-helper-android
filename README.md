@@ -23,10 +23,21 @@ export ANDROID_HOME=/path/to/Android/sdk
 # APK: app/build/outputs/apk/debug/app-debug.apk
 ```
 
-装到盒子后打开「口袋遥控 TV」，记下屏幕上的 IP。本机可先用：
+装到盒子后打开「口袋遥控 TV」。
+
+**模拟器**（Mac 不能直连 `10.0.2.15`，必须转发）：
 
 ```bash
-websocat ws://<电视IP>:17880/ws
+adb forward tcp:17880 tcp:17880
+python3 scripts/test_ws.py hello          # 屏幕出现 6 位配对码
+python3 scripts/test_ws.py pin 123456     # 换成屏幕上的数字，应返回 hello_ok
+python3 scripts/test_ws.py key up         # 或 down/left/right/ok/back/home/menu
+python3 scripts/test_ws.py text hello
+python3 scripts/test_ws.py apps
 ```
 
-发送：`{"v":1,"id":"1","type":"hello","payload":{}}`，应收到 `need_pin`，电视会显示 6 位配对码。
+**真机同一 Wi-Fi**：
+
+```bash
+python3 scripts/test_ws.py --host 192.168.1.20 hello
+```
