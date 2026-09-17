@@ -6,7 +6,7 @@
 |---|---|
 | [`docs/PROTOCOL.md`](docs/PROTOCOL.md) | 协议权威文本，须与 `pockettv-remote-android` 的同名文件一致 |
 | [`docs/SPEC.md`](docs/SPEC.md) | 本仓库（电视端）怎么实现 |
-| [`docs/DESIGN.md`](docs/DESIGN.md) | 背景与范围，不依赖其它本地目录 |
+| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | 形态、范围、技术栈，不是 UI 规范 |
 
 ## 本仓库
 

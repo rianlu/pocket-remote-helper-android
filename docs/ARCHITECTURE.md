@@ -1,4 +1,6 @@
-# PocketTV 设计说明
+# PocketTV 架构说明
+
+这是系统怎么拆、做什么/不做什么，**不是** Material 或 UI 视觉规范。
 
 开源后只从 GitHub 拉取本仓库与 `pockettv-remote-android`。**本文件随仓库走**，不依赖任何本地工作区文档。
 
