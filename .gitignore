@@ -23,3 +23,6 @@ app/debug/
 *.keystore
 google-services.json
 /app/build
+/plugin/build
+/inject-api/build
+scripts/logs/

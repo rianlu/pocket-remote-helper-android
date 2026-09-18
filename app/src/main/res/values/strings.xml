@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">口袋遥控 TV</string>
+    <string name="app_name">口袋遥控助手</string>
     <string name="notify_running">遥控服务运行中</string>
     <string name="status_waiting">等待手机连接</string>
-    <string name="status_pin">在手机上输入配对码</string>
+    <string name="status_pin">请在手机上输入此代码</string>
     <string name="status_connected">已连接</string>
-    <string name="label_pin">配对码</string>
+    <string name="label_pin">请在手机上输入</string>
     <string name="label_ip">本机 IP</string>
     <string name="hint_boot">若开机不能自动启动，请把本应用加入系统自启动白名单。</string>
+    <string name="inject_unknown">连接模式：检测中</string>
+    <string name="inject_plugin">连接模式：增强</string>
+    <string name="inject_adb">连接模式：ADB</string>
+    <string name="inject_input">连接模式：标准（仅旧系统）</string>
+    <string name="inject_none">按键不可用，请打开网络调试</string>
+    <string name="btn_open_debug">打开网络调试</string>
+    <string name="toast_open_debug">请到 设置 → 关于 → 连点版本号 → 开发者选项 → 打开网络调试 / USB 调试</string>
 </resources>

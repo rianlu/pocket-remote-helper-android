@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="app_surface">#FF0B1326</color>
-    <color name="app_on_surface">#FFDAE2FD</color>
-    <color name="app_primary">#FF2665FD</color>
+    <color name="app_surface">#FF000000</color>
+    <color name="app_on_surface">#FFFFFFFF</color>
+    <color name="app_primary">#FF0A84FF</color>
     <color name="app_pin">#FFFFFFFF</color>
-    <color name="app_muted">#FF9AA4C7</color>
-    <color name="app_launcher_bg">#FF2665FD</color>
+    <color name="app_muted">#FF8E8E93</color>
+    <color name="app_slot">#FF1C1C1E</color>
+    <color name="app_focus">#33FFFFFF</color>
+    <color name="app_launcher_bg">#FF000000</color>
 </resources>

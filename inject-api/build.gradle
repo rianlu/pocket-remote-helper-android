@@ -1,0 +1,18 @@
+plugins {
+    id "com.android.library"
+}
+
+android {
+    namespace "com.pocketremote.helper.inject.api"
+    compileSdk 35
+    defaultConfig {
+        minSdk 16
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildFeatures {
+        aidl true
+    }
+}

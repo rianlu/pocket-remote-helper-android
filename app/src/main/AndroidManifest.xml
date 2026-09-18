@@ -8,8 +8,15 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+    <uses-permission android:name="android.permission.GET_PACKAGE_SIZE" />
+
+    <queries>
+        <package android:name="com.pocketremote.helper.plugin" />
+    </queries>
 
     <uses-feature
         android:name="android.software.leanback"
@@ -19,13 +26,13 @@
         android:required="false" />
 
     <application
-        android:name=".PocketTvApp"
-        android:allowBackup="true"
+        android:name=".PocketRemoteApp"
+        android:allowBackup="false"
         android:icon="@drawable/ic_launcher_app"
         android:banner="@drawable/ic_launcher_app"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
-        android:theme="@style/Theme.PocketTvHelper"
+        android:theme="@style/Theme.PocketHelper"
         android:usesCleartextTraffic="true">
 
         <activity
@@ -42,11 +49,13 @@
 
         <service
             android:name=".RemoteService"
-            android:exported="false" />
+            android:exported="false"
+            android:foregroundServiceType="connectedDevice" />
 
         <receiver
             android:name=".BootReceiver"
-            android:exported="true">
+            android:exported="true"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -54,7 +63,7 @@
 
         <provider
             android:name=".store.FileShareProvider"
-            android:authorities="com.pockettv.tv.files"
+            android:authorities="com.pocketremote.helper.files"
             android:exported="false"
             android:grantUriPermissions="true" />
     </application>

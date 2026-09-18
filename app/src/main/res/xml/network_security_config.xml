@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
-    <!-- LAN helper: WebSocket/HTTP on the local network; also 127.0.0.1 adbd. -->
+    <!-- 本机只对局域网手机提供明文 WS/HTTP；盒子不对外网。 -->
     <base-config cleartextTrafficPermitted="true" />
 </network-security-config>

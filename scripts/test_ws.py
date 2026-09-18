@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PocketTV Helper protocol test.
+"""PocketRemote Helper protocol test.
 
 Full flow (you only type the PIN shown on the TV):
 
@@ -156,7 +156,7 @@ def _recv_exact(sock, n):
 
 def token_path(host, port):
     safe = "%s_%s" % (host.replace(".", "_"), port)
-    return os.path.join(os.path.expanduser("~"), ".pockettv-token-" + safe)
+    return os.path.join(os.path.expanduser("~"), ".pocketremote-token-" + safe)
 
 
 def load_token(host, port):
@@ -365,7 +365,7 @@ def main():
     if not any(a in COMMANDS for a in sys.argv[1:]):
         sys.argv.insert(1, "all")
 
-    parser = argparse.ArgumentParser(description="PocketTV Helper protocol test client")
+    parser = argparse.ArgumentParser(description="PocketRemote Helper protocol test client")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=17880)
     parser.add_argument("--log", default="", help="log file path (default scripts/logs/test_ws-*.log)")

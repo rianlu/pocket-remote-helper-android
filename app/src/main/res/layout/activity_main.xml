@@ -1,62 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_surface"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:padding="32dp">
+    android:background="@color/app_surface">
 
-    <TextView
-        android:id="@+id/text_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:textColor="@color/app_on_surface"
-        android:textSize="28sp" />
-
-    <TextView
-        android:id="@+id/text_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/status_waiting"
-        android:textColor="@color/app_muted"
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/text_pin_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="@string/label_pin"
-        android:textColor="@color/app_muted"
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/text_pin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="------"
-        android:textColor="@color/app_pin"
-        android:textSize="56sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/text_ip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:textColor="@color/app_muted"
-        android:textSize="18sp" />
-
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_height="match_parent"
         android:gravity="center"
-        android:text="@string/hint_boot"
-        android:textColor="@color/app_muted"
-        android:textSize="14sp" />
-</LinearLayout>
+        android:orientation="vertical"
+        android:paddingLeft="80dp"
+        android:paddingTop="56dp"
+        android:paddingRight="80dp"
+        android:paddingBottom="56dp">
+
+        <TextView
+            android:id="@+id/text_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textColor="@color/app_muted"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/text_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="@string/status_waiting"
+            android:textColor="@color/app_on_surface"
+            android:textSize="32sp" />
+
+        <TextView
+            android:id="@+id/text_pin_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:text="@string/label_pin"
+            android:textColor="@color/app_muted"
+            android:textSize="16sp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView android:id="@+id/pin_d0" style="@style/PinDigit" />
+            <TextView android:id="@+id/pin_d1" style="@style/PinDigit" />
+            <TextView android:id="@+id/pin_d2" style="@style/PinDigit" />
+            <TextView android:id="@+id/pin_d3" style="@style/PinDigit" />
+            <TextView android:id="@+id/pin_d4" style="@style/PinDigit" />
+            <TextView android:id="@+id/pin_d5" style="@style/PinDigit" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/text_pin"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/text_ip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="56dp"
+            android:textColor="@color/app_muted"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/text_inject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/inject_unknown"
+            android:textColor="@color/app_muted"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btn_debug"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/tv_btn"
+            android:focusable="true"
+            android:minHeight="48dp"
+            android:paddingLeft="28dp"
+            android:paddingTop="12dp"
+            android:paddingRight="28dp"
+            android:paddingBottom="12dp"
+            android:text="@string/btn_open_debug"
+            android:textColor="@color/app_on_surface"
+            android:visibility="gone" />
+    </LinearLayout>
+</FrameLayout>

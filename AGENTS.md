@@ -4,24 +4,26 @@
 
 | 文件 | 用途 |
 |---|---|
-| [`docs/PROTOCOL.md`](docs/PROTOCOL.md) | 协议权威文本，须与 `pockettv-remote-android` 的同名文件一致 |
+| [`docs/PROTOCOL.md`](docs/PROTOCOL.md) | 协议权威文本，须与 `pocket-remote-android` 的同名文件一致 |
 | [`docs/SPEC.md`](docs/SPEC.md) | 本仓库（电视端）怎么实现 |
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | 形态、范围、技术栈，不是 UI 规范 |
 
 ## 本仓库
 
-**pockettv-helper-android**：安卓电视/盒子助手（口袋遥控 TV）。手机在独立仓库 `pockettv-remote-android`。不要在本仓库写手机 App 或鸿蒙。
+**pocket-remote-helper-android**：安卓电视/盒子助手（口袋遥控助手）。手机在独立仓库 `pocket-remote-android`。不要在本仓库写手机 App 或鸿蒙。
 
-## 目录结构（禁止再平铺到 `com.pockettv.tv` 根包）
+## 目录结构（禁止再平铺到 `com.pocketremote.helper` 根包）
 
 ```
-app/src/main/java/com/pockettv/tv/
-  PocketTvApp.java          Application
+app/src/main/java/com/pocketremote/helper/
+  PocketRemoteApp.java          Application
   MainActivity.java         主界面
   RemoteService.java        前台服务入口
   BootReceiver.java         开机启动
   protocol/                 协议常量与 JSON 分发
-  inject/                   input / 本机 adbd 注入
+  inject/                   input / 本机 adbd / 系统插件客户端
+inject-api/                 AIDL IPocketInject（助手与插件共用）
+plugin/                     系统签名注入 APK（com.pocketremote.helper.plugin）
   net/                      WebSocket+HTTP、UDP、NSD
   store/                    PIN、token、文件、应用列表
   ui/                       主线程状态总线
@@ -54,7 +56,7 @@ app/src/main/java/com/pockettv/tv/
 - ADB 当遥控；第一期不扫厂商口装包
 - 静默 `pm install`
 - MQTT、广告 SDK、ConnectSDK
-- 路径逃逸出 `/sdcard/PocketTV/`
+- 路径逃逸出 `/sdcard/PocketRemote/`
 - 把手机端代码放进本仓库
 
 缺规格就问，不要猜。按键和发现须在 Android 4.2–4.4 真盒子验证；可用 `python3 scripts/test_ws.py` 先验 hello。

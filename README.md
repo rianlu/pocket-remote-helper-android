@@ -1,10 +1,11 @@
-# PocketTV Helper (Android)
+# Pocket Remote Helper（Android 电视）
 
-安卓电视/盒子助手（口袋遥控 TV）。接收 [pockettv-remote-android](https://github.com/PLACEHOLDER/pockettv-remote-android) 的按键、文本和文件。
+安卓电视/盒子助手（口袋遥控助手）。接收 [pocket-remote-android](https://github.com/rianlu/pocket-remote-android) 的按键、文本和文件。
 
 | | |
 |---|---|
-| applicationId | `com.pockettv.tv` |
+| GitHub | https://github.com/rianlu/pocket-remote-helper-android |
+| applicationId | `com.pocketremote.helper` |
 | minSdk | 16（Android 4.1） |
 | 协议（权威） | [`docs/PROTOCOL.md`](docs/PROTOCOL.md) |
 | 本端规格 | [`docs/SPEC.md`](docs/SPEC.md) |
@@ -21,9 +22,13 @@
 export ANDROID_HOME=/path/to/Android/sdk
 ./gradlew assembleDebug
 # APK: app/build/outputs/apk/debug/app-debug.apk
+./gradlew :plugin:signPlatform
+# APK: plugin/build/outputs/apk/debug/plugin-platform.apk
 ```
 
-装到盒子后打开「口袋遥控 TV」。
+只装助手：`app/build/outputs/apk/debug/app-debug.apk`。插件已打进 assets，打开助手后会静默安装（无桌面图标）。固件不是 AOSP platform 测试证书时走本机 adbd（需电视已开网络调试）。手机连接页可选增强 / ADB，`hello.inject` 锁定本连接通道；遥控页与电视主页显示当前通道。注入失败时提示按键不可用并引导打开网络调试，不作为「受限模式」提供。
+
+装到盒子后打开「口袋遥控助手」。
 
 **模拟器**（Mac 不能直连模拟器 IP，必须转发）：
 

@@ -3,14 +3,14 @@ plugins {
 }
 
 android {
-    namespace "com.pockettv.tv"
+    namespace "com.pocketremote.helper"
     compileSdk 35
     defaultConfig {
-        applicationId "com.pockettv.tv"
+        applicationId "com.pocketremote.helper"
         minSdk 16
         targetSdk 33
-        versionCode 1
-        versionName "0.1.0"
+        versionCode 18
+        versionName "0.2.1"
     }
     buildTypes {
         release {
@@ -25,7 +25,32 @@ android {
     buildFeatures {
         buildConfig true
     }
+    sourceSets {
+        main.assets.srcDirs += file("$buildDir/generated/pluginAsset")
+    }
+}
+
+def pluginAssetDir = file("$buildDir/generated/pluginAsset")
+tasks.register("copyPluginAsset") {
+    group = "build"
+    description = "把平台签名插件打进助手 assets，用户只装一个 APK"
+    dependsOn ":plugin:signPlatform"
+    def src = rootProject.file("plugin/build/outputs/apk/debug/plugin-platform.apk")
+    inputs.file(src)
+    outputs.dir(pluginAssetDir)
+    doLast {
+        pluginAssetDir.mkdirs()
+        def dest = new File(pluginAssetDir, "plugin.apk")
+        dest.bytes = src.bytes
+    }
+}
+tasks.named("preBuild").configure { dependsOn "copyPluginAsset" }
+afterEvaluate {
+    tasks.matching { it.name.toLowerCase().contains("assets") }.configureEach {
+        dependsOn "copyPluginAsset"
+    }
 }
 
 dependencies {
+    implementation project(":inject-api")
 }

@@ -1,0 +1,74 @@
+plugins {
+    id "com.android.application"
+}
+
+android {
+    namespace "com.pocketremote.helper.plugin"
+    compileSdk 35
+    defaultConfig {
+        applicationId "com.pocketremote.helper.plugin"
+        minSdk 16
+        targetSdk 21
+        versionCode 11
+        versionName "0.2.0"
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+}
+
+dependencies {
+    implementation project(":inject-api")
+}
+
+def sdkDir = {
+    def f = rootProject.file("local.properties")
+    if (f.exists()) {
+        def p = new Properties()
+        p.load(f.newDataInputStream())
+        return p.getProperty("sdk.dir")
+    }
+    return System.getenv("ANDROID_HOME")
+}()
+
+def apksigner = {
+    def bt = new File(sdkDir, "build-tools")
+    def versions = bt.listFiles()?.findAll { it.isDirectory() }?.sort { it.name }
+    if (versions) {
+        def bin = new File(versions.last(), "apksigner")
+        if (bin.exists()) return bin.absolutePath
+    }
+    return "apksigner"
+}()
+
+tasks.register("signPlatform") {
+    group = "build"
+    description = "用 AOSP platform 证书重签插件"
+    dependsOn "assembleDebug"
+    doLast {
+        def unsigned = file("build/outputs/apk/debug/plugin-debug.apk")
+        def signed = file("build/outputs/apk/debug/plugin-platform.apk")
+        def key = file("keys/platform.pk8")
+        def cert = file("keys/platform.x509.pem")
+        exec {
+            commandLine apksigner, "sign",
+                    "--v1-signing-enabled", "true",
+                    "--v2-signing-enabled", "true",
+                    "--v3-signing-enabled", "false",
+                    "--key", key.absolutePath,
+                    "--cert", cert.absolutePath,
+                    "--out", signed.absolutePath,
+                    unsigned.absolutePath
+        }
+        exec {
+            commandLine apksigner, "verify", "--verbose", signed.absolutePath
+        }
+        println "signed: ${signed.absolutePath}"
+    }
+}

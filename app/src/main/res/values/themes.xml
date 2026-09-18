@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.PocketTvHelper" parent="@android:style/Theme.Holo.NoActionBar">
+    <style name="Theme.PocketHelper" parent="@android:style/Theme.Holo.NoActionBar">
         <item name="android:windowBackground">@color/app_surface</item>
         <item name="android:colorBackground">@color/app_surface</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="PinDigit">
+        <item name="android:layout_width">56dp</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_margin">6dp</item>
+        <item name="android:background">@drawable/tv_pin_slot</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/app_pin</item>
+        <item name="android:textSize">48sp</item>
+        <item name="android:text">·</item>
     </style>
 </resources>
