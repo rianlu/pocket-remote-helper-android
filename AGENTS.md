@@ -31,6 +31,11 @@ plugin/                     系统签名注入 APK（com.pocketremote.helper.plu
 
 新类必须放进对应子包，不要在根包继续堆业务类。Manifest 里组件用相对名（`.store.FileShareProvider`）。
 
+## 提交说明
+
+- 语言：**中文**。标题一行说清做了什么；必要时正文补原因或范围。
+- 不要用英文写 commit message。
+
 ## 注释
 
 - 语言：**中文**。
