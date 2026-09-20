@@ -8,9 +8,9 @@ android {
     defaultConfig {
         applicationId "com.pocketremote.helper"
         minSdk 16
-        targetSdk 33
-        versionCode 18
-        versionName "0.2.1"
+        targetSdk 21
+        versionCode 25
+        versionName "0.2.8"
     }
     buildTypes {
         release {

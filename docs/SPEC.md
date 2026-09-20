@@ -4,7 +4,7 @@
 
 - 桌面名：口袋遥控助手
 - applicationId：`com.pocketremote.helper`
-- minSdk **16**（Android 4.1），compileSdk 35
+- minSdk **16**（Android 4.1），targetSdk **21**（与市面电视助手相同：存储/悬浮窗安装时授予，电视上不弹运行时授权），compileSdk 35
 - UI：View，禁止 Compose
 - 网络：Java-WebSocket 或等价；HTTP 用 OkHttp **3.12.13** 或 `HttpURLConnection`（禁止 OkHttp 4）
 - 线程：`HandlerThread` / `Executor`，禁止 AsyncTask
@@ -29,7 +29,7 @@
 - 界面最少：主页显示连接状态 / PIN；通知栏「遥控服务运行中」
 - Manifest：`LAUNCHER` + `LEANBACK_LAUNCHER`（`leanback` required=false）
 
-权限：`INTERNET`、`ACCESS_NETWORK_STATE`、`ACCESS_WIFI_STATE`、`CHANGE_WIFI_MULTICAST_STATE`、`RECEIVE_BOOT_COMPLETED`、`WRITE_EXTERNAL_STORAGE`、`FOREGROUND_SERVICE`。不要无障碍、不要 `BIND_INPUT_METHOD`。
+权限：`INTERNET`、`ACCESS_NETWORK_STATE`、`ACCESS_WIFI_STATE`、`CHANGE_WIFI_MULTICAST_STATE`、`RECEIVE_BOOT_COMPLETED`、`WRITE_EXTERNAL_STORAGE`、`SYSTEM_ALERT_WINDOW`、`FOREGROUND_SERVICE`。不要无障碍、不要 `BIND_INPUT_METHOD`。
 
 明文 HTTP 仅 RFC1918。
 
@@ -58,11 +58,11 @@
 
 音量：`AudioManager.adjustStreamVolume(STREAM_MUSIC, …, FLAG_SHOW_UI)`。
 
-安装 APK：`ACTION_VIEW` + `application/vnd.android.package-archive`。API < 24 可用 `file://`，7.0+ FileProvider。走系统确认页。
+安装 APK：`ACTION_VIEW` + `application/vnd.android.package-archive`。API < 24 可用 `file://`，7.0+ FileProvider。走系统确认页。上传到 `apk` 目录后会调起安装；`apk_install` 按文件名再装已有包。
 
 打开应用：LAUNCHER 或 Leanback。列表只含可打开的应用，带占用大小（能读到的 APK/数据/缓存，否则退回 APK 文件体积）与 `extractable`。图标 `GET /apps/icon`。提取 APK `GET /apps/apk` 仅用户应用且无分体包（必要时经本机 adbd 拷出）；系统应用与分体包拒绝，避免半包损坏。卸载：`ACTION_DELETE`，系统应用不调起。
 
-文件只写 `/sdcard/PocketRemote/inbox|apk`，拒绝 `..`。
+文件只写 `/sdcard/PocketRemote/inbox|apk`，拒绝 `..`。`GET /transfer/list` 另扫描公共存储中的 `.apk`（不含 `/data`、`Android/data`）。`GET /transfer/icon?path=` 用 `getPackageArchiveInfo` 读未安装 APK 图标。`apk_install` 仅允许这些路径。
 
 设备信息：`info` 回 `info_ok`（含 SoC `ro.board.platform`、`/proc/cpuinfo` 的 CPU）。`clean` 只结束后台应用（`killBackgroundProcesses` + `am kill-all`），不删缓存、不删文件。
 

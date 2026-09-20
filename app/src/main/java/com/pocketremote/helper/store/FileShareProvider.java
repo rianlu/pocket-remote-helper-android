@@ -32,7 +32,15 @@ public final class FileShareProvider extends ContentProvider {
         }
         String dir = rel.substring(0, slash);
         String name = rel.substring(slash + 1);
-        File file = new TransferStore().resolve(dir, name);
+        TransferStore store = new TransferStore();
+        File file;
+        if ("ext".equals(dir)) {
+            file = store.resolveInstallable(name);
+        } else if ("abs".equals(dir)) {
+            file = store.resolveInstallable("/" + name);
+        } else {
+            file = store.resolve(dir, name);
+        }
         if (file == null || !file.isFile()) {
             throw new FileNotFoundException(path);
         }

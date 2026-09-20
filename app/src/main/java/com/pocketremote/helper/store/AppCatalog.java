@@ -123,6 +123,34 @@ public final class AppCatalog {
         }
     }
 
+    /** 未安装 APK 文件的图标；解析失败返回 null。 */
+    public byte[] archiveIcon(File apk) {
+        if (apk == null || !apk.isFile()) {
+            return null;
+        }
+        try {
+            String path = apk.getAbsolutePath();
+            PackageManager pm = app.getPackageManager();
+            PackageInfo pi = pm.getPackageArchiveInfo(path, 0);
+            if (pi == null || pi.applicationInfo == null) {
+                return null;
+            }
+            pi.applicationInfo.sourceDir = path;
+            pi.applicationInfo.publicSourceDir = path;
+            Drawable d = pi.applicationInfo.loadIcon(pm);
+            Bitmap b = Bitmap.createBitmap(96, 96, Bitmap.Config.ARGB_8888);
+            Canvas c = new Canvas(b);
+            d.setBounds(0, 0, 96, 96);
+            d.draw(c);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            b.compress(Bitmap.CompressFormat.PNG, 90, bos);
+            b.recycle();
+            return bos.toByteArray();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public File apkSource(String pkg) {
         try {
             ApplicationInfo ai = app.getPackageManager().getApplicationInfo(pkg, 0);
@@ -258,12 +286,43 @@ public final class AppCatalog {
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         Uri uri;
         if (Build.VERSION.SDK_INT >= 24) {
-            uri = Uri.parse("content://" + Constants.FILE_AUTHORITY + "/apk/" + file.getName());
+            uri = shareUri(file);
         } else {
             uri = Uri.fromFile(file);
         }
         intent.setDataAndType(uri, "application/vnd.android.package-archive");
         app.startActivity(intent);
         return true;
+    }
+
+    private Uri shareUri(File file) {
+        TransferStore store = new TransferStore();
+        File inbox = store.dir(Constants.DIR_INBOX);
+        File apk = store.dir(Constants.DIR_APK);
+        try {
+            String canon = file.getCanonicalPath();
+            if (apk != null && canon.startsWith(apk.getCanonicalPath() + File.separator)) {
+                return Uri.parse("content://" + Constants.FILE_AUTHORITY + "/apk/" + file.getName());
+            }
+            if (inbox != null && canon.startsWith(inbox.getCanonicalPath() + File.separator)) {
+                return Uri.parse("content://" + Constants.FILE_AUTHORITY + "/inbox/" + file.getName());
+            }
+        } catch (Exception ignored) {
+        }
+        Uri.Builder b = new Uri.Builder()
+                .scheme("content")
+                .authority(Constants.FILE_AUTHORITY);
+        String abs = file.getAbsolutePath();
+        if (abs.startsWith("/")) {
+            abs = abs.substring(1);
+        }
+        b.appendPath("abs");
+        String[] parts = abs.split("/");
+        for (int i = 0; i < parts.length; i++) {
+            if (parts[i].length() > 0) {
+                b.appendPath(parts[i]);
+            }
+        }
+        return b.build();
     }
 }

@@ -315,6 +315,16 @@ public final class WsHttpServer {
             out.flush();
             return;
         }
+        if ("GET".equals(method) && "/transfer/icon".equals(p)) {
+            String apkPath = query.get("path");
+            byte[] png = commands.archiveIcon(apkPath);
+            if (png == null || png.length == 0) {
+                writeHttp(out, 404, "text/plain", "missing".getBytes("UTF-8"));
+                return;
+            }
+            writeHttp(out, 200, "image/png", png);
+            return;
+        }
         if ("GET".equals(method) && "/apps/icon".equals(p)) {
             String pkg = query.get("pkg");
             byte[] png = commands.appIcon(pkg);

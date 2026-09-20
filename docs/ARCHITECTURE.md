@@ -32,10 +32,10 @@
 
 对齐目标：公开层（系统测试钥匙插件、本机 adbd、可写则 `/dev/input`）做全；不把悟空的厂商签名 APK 打进仓库。厂商层要另备对应固件证书，不能靠一颗通用插件。
 
-| 仓库 | 角色 | minSdk |
-|---|---|---|
-| pocket-remote-android | 手机客户端 | 26 |
-| pocket-remote-helper-android | 电视助手 | 16 |
+| 仓库 | 角色 | minSdk | targetSdk |
+|---|---|---|---|
+| pocket-remote-android | 手机客户端 | 26 | 35 |
+| pocket-remote-helper-android | 电视助手 | 16 | 21（安装时授予存储/悬浮窗，不弹运行时授权） |
 
 发现：NSD → 失败 UDP → 再失败手填 IP。  
 遥控：按键 + 鼠标相对指针（插件叠光标；无插件则鼠标不可用）。  

@@ -31,6 +31,13 @@ plugin/                     系统签名注入 APK（com.pocketremote.helper.plu
 
 新类必须放进对应子包，不要在根包继续堆业务类。Manifest 里组件用相对名（`.store.FileShareProvider`）。
 
+## 版本
+
+- 未发版、自己测试时：**不要**每改一点功能就升 `versionName` / `versionCode`。`adb install -r` 不依赖升号。
+- 只有用户明确说要发版、打 tag，或覆盖安装因 versionCode 失败时才升。
+- README 徽章上的版本与 `app/build.gradle` 保持一致，未升号就不要改徽章。
+- 插件 `versionCode` 只在插件本身有行为变化时才升（助手靠它决定是否重装插件）。
+
 ## 提交说明
 
 - 语言：**中文**。标题一行说清做了什么；必要时正文补原因或范围。

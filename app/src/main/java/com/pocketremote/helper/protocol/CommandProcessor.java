@@ -14,6 +14,7 @@ import com.pocketremote.helper.inject.Injector;
 import com.pocketremote.helper.store.Prefs;
 import com.pocketremote.helper.store.PinSession;
 import com.pocketremote.helper.store.AppCatalog;
+import com.pocketremote.helper.store.TransferStore;
 import com.pocketremote.helper.store.SysInfo;
 import com.pocketremote.helper.store.Cleaner;
 import com.pocketremote.helper.ui.UiBus;
@@ -26,6 +27,7 @@ public final class CommandProcessor {
     private final Injector injector;
     private final PinSession pins;
     private final AppCatalog apps;
+    private final TransferStore store = new TransferStore();
     private final Handler main = new Handler(Looper.getMainLooper());
 
     public CommandProcessor(Context context, Prefs prefs, Injector injector, PinSession pins) {
@@ -106,6 +108,24 @@ public final class CommandProcessor {
             apps.uninstall(payload.optString("pkg", ""));
             return null;
         }
+        if (Constants.TYPE_APK_INSTALL.equals(type)) {
+            File f = null;
+            String path = payload.optString("path", "");
+            if (path.length() > 0) {
+                f = store.resolveInstallable(path);
+            }
+            if (f == null) {
+                String name = payload.optString("name", "");
+                if (name.length() > 0 && name.toLowerCase(java.util.Locale.US).endsWith(".apk")) {
+                    f = store.findByName(name);
+                }
+            }
+            if (f == null || !f.isFile()) {
+                return error(id, Constants.ERR_FS, "apk");
+            }
+            apps.installApk(f);
+            return null;
+        }
         return error(id, Constants.ERR_PROTOCOL, type);
     }
 
@@ -168,6 +188,11 @@ public final class CommandProcessor {
 
     public byte[] appIcon(String pkg) {
         return apps.iconPng(pkg);
+    }
+
+    public byte[] archiveIcon(String path) {
+        File f = store.resolveInstallable(path);
+        return apps.archiveIcon(f);
     }
 
     /** 把应用 APK 拷到可读目录。系统应用与分体包拒绝。调用方读完应删除。 */

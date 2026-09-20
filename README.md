@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Android-3DDC84.svg?logo=android&logoColor=white)](https://www.android.com)
 [![API](https://img.shields.io/badge/API-16%2B-brightgreen.svg)](https://developer.android.com/guide/topics/manifest/uses-sdk-element#ApiLevels)
-[![Version](https://img.shields.io/badge/version-0.2.1-blue.svg)](https://github.com/rianlu/pocket-remote-helper-android)
+[![Version](https://img.shields.io/badge/version-0.2.8-blue.svg)](https://github.com/rianlu/pocket-remote-helper-android)
 [![Java](https://img.shields.io/badge/Java-8-ED8B00.svg?logo=openjdk&logoColor=white)](https://openjdk.org)
 
 接收 [口袋遥控](https://github.com/rianlu/pocket-remote-android) 的按键、文本、鼠标和文件。常驻前台服务，本仓库不含手机 App。
@@ -16,8 +16,8 @@
 | GitHub | https://github.com/rianlu/pocket-remote-helper-android |
 | applicationId | `com.pocketremote.helper` |
 | 插件 | `com.pocketremote.helper.plugin`（无桌面图标） |
-| 版本 | 0.2.1（插件 0.2.0） |
-| minSdk / targetSdk | 16（Android 4.1） / 33 |
+| 版本 | 0.2.8（插件 0.2.0） |
+| minSdk / targetSdk | 16（Android 4.1） / 21 |
 | UI | Android View（不用 Compose） |
 | 配对仓库 | [pocket-remote-android](https://github.com/rianlu/pocket-remote-android) |
 

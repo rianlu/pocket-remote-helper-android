@@ -6,11 +6,14 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.pm.ServiceInfo;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.util.Log;
 
 import com.pocketremote.helper.inject.Injector;
 import com.pocketremote.helper.inject.PluginInstaller;
+import com.pocketremote.helper.net.NetInfo;
 import com.pocketremote.helper.net.NsdAdvertiser;
 import com.pocketremote.helper.net.UdpDiscovery;
 import com.pocketremote.helper.net.WsHttpServer;
@@ -31,6 +34,8 @@ public final class RemoteService extends Service {
     private UdpDiscovery udp;
     private NsdAdvertiser nsd;
     private Injector injector;
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
+    private int nsdRetries;
 
     @Override
     public void onCreate() {
@@ -61,7 +66,27 @@ public final class RemoteService extends Service {
         udp.start();
         nsd = new NsdAdvertiser(this, prefs);
         nsd.start();
+        scheduleNsdRetry();
         UiBus.get().postStatus(getString(R.string.status_waiting));
+    }
+
+    /** 开机时 Wi-Fi 往往晚于 BOOT_COMPLETED，NSD 需等有 IPv4 后再宣告。 */
+    private void scheduleNsdRetry() {
+        if (!"0.0.0.0".equals(NetInfo.ipv4()) || nsdRetries >= 15) {
+            return;
+        }
+        nsdRetries++;
+        mainHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (nsd == null) {
+                    return;
+                }
+                nsd.stop();
+                nsd.start();
+                scheduleNsdRetry();
+            }
+        }, 2000);
     }
 
     @Override
@@ -89,6 +114,7 @@ public final class RemoteService extends Service {
         if (nsd != null) {
             nsd.stop();
         }
+        mainHandler.removeCallbacksAndMessages(null);
         super.onDestroy();
     }
 

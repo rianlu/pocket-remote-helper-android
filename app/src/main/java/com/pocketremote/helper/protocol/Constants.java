@@ -24,6 +24,7 @@ public final class Constants {
     public static final String TYPE_APPS_OK = "apps_ok";
     public static final String TYPE_APP_OPEN = "app_open";
     public static final String TYPE_APP_UNINSTALL = "app_uninstall";
+    public static final String TYPE_APK_INSTALL = "apk_install";
     public static final String TYPE_POINTER = "pointer";
     public static final String TYPE_INFO = "info";
     public static final String TYPE_INFO_OK = "info_ok";

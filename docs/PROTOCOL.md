@@ -49,6 +49,7 @@ WebSocket **text** 帧，每条一个 JSON：
 | `apps_ok` | 电视→手机 | `{ "apps": [ { "name", "pkg", "system": false, "size": 0, "extractable": true } ] }` `size` 为占用字节；`extractable` 为可提取完整 APK |
 | `app_open` | 手机→电视 | `{ "pkg": "..." }` |
 | `app_uninstall` | 手机→电视 | `{ "pkg": "..." }` |
+| `apk_install` | 手机→电视 | `{ "name": "xxx.apk", "path": "Download/xx.apk" }` `path` 优先（公共存储相对路径或绝对路径），否则按 `name` 在 `PocketRemote/apk\|inbox` 查找。仅 `.apk`，拒绝 `..` 与非公共存储。调起系统安装器，不存在回 `error FS` |
 | `pointer` | 手机→电视 | `{ "action": "move\|click\|down\|up", "dx": 0, "dy": 0 }` 鼠标相对位移；click 为单击 |
 | `info` | 手机→电视 | `{}` |
 | `info_ok` | 电视→手机 | `{ "tvName", "manufacturer", "brand", "android", "sdk", "abi", "soc", "cpu", "ip", "mac", "firmware", "hardware", "width", "height", "density", "ramMb", "ramAvailMb", "storageFreeMb", "storageTotalMb", "cacheMb", "injectMode", "injectOk", "helper" }` |
@@ -94,7 +95,8 @@ Token 双方持久化。HTTP：`Authorization: Bearer <token>`，否则 401。
 |---|---|---|
 | PUT | `/transfer/upload?dir=inbox\|apk&name=` | 请求体原始字节 |
 | GET | `/transfer/download?name=` | |
-| GET | `/transfer/list` | `{ "files": [ { "name", "dir": "inbox\|apk", "size", "mtime" } ] }` |
+| GET | `/transfer/list` | `{ "files": [ { "name", "dir", "size", "mtime", "path" } ] }` 含 `PocketRemote` 与公共存储扫描到的 `.apk`；`path` 供 `apk_install` |
+| GET | `/transfer/icon?path=` | 未安装 APK 的 PNG 图标；`path` 与 `apk_install` 相同 |
 | GET | `/apps/icon?pkg=` | PNG 应用图标 |
 | GET | `/apps/apk?pkg=` | 该包 APK 字节。系统应用、分体包返回 403 |
 
