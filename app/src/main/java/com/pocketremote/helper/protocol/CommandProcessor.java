@@ -1,10 +1,12 @@
 package com.pocketremote.helper.protocol;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
+import com.pocketremote.helper.MainActivity;
 
 import org.json.JSONObject;
 
@@ -153,6 +155,21 @@ public final class CommandProcessor {
         String shown = pins.begin();
         UiBus.get().postPin(shown);
         UiBus.get().postStatus(app.getString(R.string.status_pin));
+        // 手机发起配对时，自动把 TV 端界面拉到前台显示配对码
+        main.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Intent bring = new Intent(app, MainActivity.class);
+                    bring.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                            | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+                            | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    app.startActivity(bring);
+                } catch (Exception e) {
+                    android.util.Log.w("PocketRemote", "bring to front failed", e);
+                }
+            }
+        });
         main.postDelayed(new Runnable() {
             @Override
             public void run() {
